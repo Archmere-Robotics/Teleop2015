@@ -97,13 +97,13 @@ void udServos(){//updates the servos (and conveyor & flag motors).
 	//TODO: lift hook
 	if(joy2Btn(3)){
 		setBasketPos(60);
-		}else{
+	}else{
 	}
 
 	//control flag motor
 	if(joy2Btn(4)){
 		moveFlag(100);
-		}else{
+	}else{
 		moveFlag(0);
 	}
 	//move basket down
@@ -134,10 +134,10 @@ void udServos(){//updates the servos (and conveyor & flag motors).
 	if(joy2Btn(10)){moveConveyor(false);}
 	//if(joy2Btn(10)){conveyorActive=false;}
 	//
-	if(abs(j2y2)>joyTol){
+	if(abs(j2y2)>joyTol) {
 
 	}
-	if(abs(j2y1)>joyTol){
+	if(abs(j2y1)>joyTol) {
 		moveConveyor(j2y1);
 	}
 	//move the hook up or down wih d-pad
@@ -166,15 +166,14 @@ void udServos(){//updates the servos (and conveyor & flag motors).
 
 	updateServos();
 }
-void udLight(){
+void udLight() {
 	lightVal+=dl;
 	if(abs(lightVal)>100){
 		dl*=-1;
 	}
 	motor[motorC]=lightVal;
 }
-task main()
-{
+task main() {
 	init();
 	waitForStart();
 	while(true){
