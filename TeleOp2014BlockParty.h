@@ -2,9 +2,9 @@
 #pragma config(Hubs,  S3, HTMotor,  HTMotor,  none,     none)
 #pragma config(Hubs,  S4, HTServo,  HTMotor,  HTMotor,  none)
 #pragma config(Sensor, S1,     HTSMUX,         sensorI2CCustom)
-#pragma config(Sensor, S2,     Endgame,        sensorNone)
-#pragma config(Sensor, S3,     Drivetrain,     sensorNone)
-#pragma config(Sensor, S4,     Auxillary,      sensorNone)
+#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S3,     Drivetrain,     sensorI2CMuxController)
+#pragma config(Sensor, S4,     Auxillary,      sensorI2CMuxController)
 #pragma config(Motor,  mtr_S3_C1_1,     wheelA,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S3_C1_2,     wheelB,        tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S3_C2_1,     wheelC,        tmotorTetrix, openLoop, reversed, encoder)
@@ -25,5 +25,17 @@
 #pragma config(Servo,  srvo_S4_C1_4,    servo10,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
-#include "JoystickDriver.c"
-#include "C:\Users\Student\Documents\GitHub\libHolonomics\libHolonomics.c"
+#include "TeleOp2014BlockParty.h"
+//#include "C:\Documents and Settings\student\Desktop\RobotC2014\graphLib.c"
+const int hookOff=255;
+const int hookOn=60;
+const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
+int m1v, m2v, m3v, m4v, j1x1, j1x2, j1y1, j1y2, j2x1, j2y1, j2x2, j2y2=0;
+int lightVal=0;//light value
+int dl=1;//light change (how much the light changes every cycle
+const bool graphing=true;
+void init();
+void drive();
+void udServos();
+void udLight();
+task main();
