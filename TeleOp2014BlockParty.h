@@ -25,17 +25,33 @@
 #pragma config(Servo,  srvo_S4_C1_4,    servo10,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
-#include "TeleOp2014BlockParty.h"
-//#include "C:\Documents and Settings\student\Desktop\RobotC2014\graphLib.c"
+//@ Archmere-Robotics/libHolonomics repo on github
+#include "libHolonimics.c"
+//#include "graphLib.c"
 const int hookOff=255;
 const int hookOn=60;
 const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
 int m1v, m2v, m3v, m4v, j1x1, j1x2, j1y1, j1y2, j2x1, j2y1, j2x2, j2y2=0;
 int lightVal=0;//light value
 int dl=1;//light change (how much the light changes every cycle
-const bool graphing=true;
+// const bool graphing=true;
+/**
+ * Initializes the robot. Should only be called once
+ */
 void init();
+/**
+ * Reads the joystick values, and recalculates the motor values.
+ */
 void drive();
+/**
+ * Updates the servo values and resets their positions. Should be called once per main loop cycle.
+ */
 void udServos();
+/**
+ * Updates the heartbeat light. Should be called once per main loop cycle.
+ */
 void udLight();
+/**
+ * Main loop. Should not be called ever.
+ */
 task main();
