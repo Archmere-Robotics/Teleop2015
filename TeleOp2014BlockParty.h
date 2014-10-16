@@ -1,3 +1,6 @@
+#pragma once
+#ifndef _MOTORPRAGMAS
+#define _MOTORPRAGMAS
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
 #pragma config(Hubs,  S3, HTMotor,  HTMotor,  none,     none)
 #pragma config(Hubs,  S4, HTServo,  HTMotor,  HTMotor,  none)
@@ -25,9 +28,12 @@
 #pragma config(Servo,  srvo_S4_C1_4,    servo10,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
+#endif
 //@ Archmere-Robotics/libHolonomics repo on github
 #include "libHolonimics.c"
 //#include "graphLib.c"
+#ifndef _TELEOP2014_H
+#define _TELEOP2014_H
 const int hookOff=255;
 const int hookOn=60;
 const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
@@ -55,3 +61,5 @@ void udLight();
  * Main loop. Should not be called ever.
  */
 task main();
+
+#endif
