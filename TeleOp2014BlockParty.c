@@ -28,7 +28,7 @@
 #pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
 #pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
 #pragma once
-#include "TeleOp2014BlockParty.h"
+#include "TeleOp2014BlockParty.c"
 //#include "C:\Documents and Settings\student\Desktop\RobotC2014\graphLib.c"
 #ifndef _TELEOP2015
 #define _TELEOP2015
