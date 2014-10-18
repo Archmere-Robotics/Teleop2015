@@ -12,3 +12,4 @@ So far (as of Oct. 16), we are focusing on updating the code for our current rob
 * Updating for better coding techniques. This includes include guards, pragma guards/pragma once's, removal of dead code, optimizations, etc.
 *  Documentation. Goal: try for a comment on each function, describing what it does, what its parameters are for, and what it returns. The general idea is that anyone can join this project, and understand (pretty well) what everything does. This also means no using `void foo(int bar)` or other generic names for functions.
 *  Releases. Github has this feature, and we should use it to mark working builds. When making releases, upload compiled code (if safe) and attach it.
+* Make branches and test them. We will merge your commits if you can get yours to work better (make a pull request).
