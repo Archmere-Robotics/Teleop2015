@@ -33,18 +33,6 @@
 #ifndef _TELEOP2015
 #define _TELEOP2015
 
-//position for hook to be resting
-const int hookOff=255;
-//position for hook to be lifted
-const int hookOn=60;
-//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to filter noise or accidental bumping.
-const int joyTol=10;
-//internal variables. Save time.
-int m1v, m2v, m3v, m4v, j1x1, j1x2, j1y1, j1y2, j2x1, j2y1, j2x2, j2y2;
-//value for heartbeat sensor.
-int lightVal=0;
-int dl=1;//light change (how much the light changes every cycle
-const bool graphing=true;
 void init(){
 	servoChangeRate[basket]=0;//stops the basket from moving.
 	Stop();//stops the robot.
