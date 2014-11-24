@@ -1,32 +1,24 @@
-//overwrite other motor config setups.
-#define _MOTORPRAGMAS
-#pragma config(Hubs,  S2, HTServo,  none,     none,     none)
-#pragma config(Hubs,  S3, HTMotor,  HTMotor,  none,     none)
-#pragma config(Hubs,  S4, HTServo,  HTMotor,  HTMotor,  none)
-#pragma config(Sensor, S1,     HTSMUX,         sensorI2CCustom)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
+#pragma config(Hubs,  S2, HTServo,  HTMotor,  none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S3,     Drivetrain,     sensorI2CMuxController)
-#pragma config(Sensor, S4,     Auxillary,      sensorI2CMuxController)
-#pragma config(Motor,  mtr_S3_C1_1,     wheelA,        tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S3_C1_2,     wheelB,        tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S3_C2_1,     wheelC,        tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S3_C2_2,     wheelD,        tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S4_C2_1,     winch,         tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C2_2,     hookLift,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C3_1,     conveyorMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C3_2,     flagLift,      tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S2_C1_1,    hook,                 tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
+#pragma config(Motor,  motorA,          heartbeat,     tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorB,          leftHook,      tmotorNXT, PIDControl, encoder)
+#pragma config(Motor,  motorC,          rightHook,     tmotorNXT, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     liftRightMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     liftLeftMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     wheelB,        tmotorTetrix, PIDControl, driveLeft)
+#pragma config(Motor,  mtr_S1_C2_2,     wheelA,        tmotorTetrix, PIDControl, driveRight)
+#pragma config(Motor,  mtr_S1_C3_1,     collectorMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorF,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C2_1,     wheelC,        tmotorTetrix, PIDControl, driveRight)
+#pragma config(Motor,  mtr_S2_C2_2,     wheelD,        tmotorTetrix, PIDControl, driveLeft)
+#pragma config(Servo,  srvo_S2_C1_1,    dumpServo,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    doorServo,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
-#pragma config(Servo,  srvo_S4_C1_1,    basket,               tServoStandard)
-#pragma config(Servo,  srvo_S4_C1_2,    conveyorLift,         tServoStandard)
-#pragma config(Servo,  srvo_S4_C1_3,    servo9,               tServoNone)
-#pragma config(Servo,  srvo_S4_C1_4,    servo10,              tServoNone)
-#pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
-#pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
 #pragma once
 #include "TeleOp2015BlockParty.h"
 //#include "graphLib.c"
@@ -34,23 +26,20 @@
 #define _TELEOP2015
 
 void init(){
-	servoChangeRate[basket]=0;//stops the basket from moving.
 	Stop();//stops the robot.
-	activateServos();
+	setDoorPos(false);
+	dooractive=false;
 	moveConveyor(false);
-	setHookPos(hookOff);
+	dumpservo_pos=DUMPSERVO_FLAT;
+	activateServos();
 	return;
 }
 void drive(){
-	getJoystickSettings(joystick);//poll joystick.
-	//update joystick values. these aren't nececary, but they allow shorthand while for the rest of the code.
-	j1x1=joystick.joy1_x1; j1x2=joystick.joy1_x2; j1y1=joystick.joy1_y1; j1y2=joystick.joy1_y2;//for driver gamepad.
-	j2x1=joystick.joy2_x1; j2x2=joystick.joy2_x2; j2y1=joystick.joy2_y1; j2y2=joystick.joy2_y2;//for auxillary gamepad.
-	if(j1x1 >= joyTol || j1y1 >= joyTol || j1x1 <= -joyTol || j1y1 <= -joyTol)//determines if the drive joystick is moved. If so, move the robot.
-	{
+	getJoystickSettings(joystick);//poll joystick
+	if(abs(joystick.joy1_x1) >= joyTol || abs(joystick.joy1_y1) >= joyTol){//determines if the drive joystick is moved. If so, move the robot.{
 		//change the joystick values from -128|127 to -100|100.
-		j1x1=j1x1*25/32;
-		j1y1=j1y1*25/32;
+		int j1x1=joystick.joy1_x1*25/32;
+		int j1y1=joystick.joy1_y1*25/32;
 		// better motor code. mXv where 0<X<5 is the motor value.
 		m1v=j1x1+j1y1;
 		m2v=j1y1-j1x1;
@@ -59,122 +48,84 @@ void drive(){
 		//sends the values to the motor control library.
 		addVal(-m1v, -m2v, -m3v, -m4v);
 	}
-	if(j1x2 >=joyTol || j1x2 <= -joyTol){//determines if the rotation joystick is moved.
-		//send rotation values to the motor control library.
-		addVal(j1x2, j1x2, j1x2, j1x2);
+	if(abs(joystick.joy1_x2) >=joyTol){//determines if the rotation joystick is moved.
+		addVal(-joystick.joy1_x2, -joystick.joy1_x2, -joystick.joy1_x2, -joystick.joy1_x2);
 	}
 	//rotates robot with buttons on the back of the controller & sends them to the motor control library.
-	if(joy1Btn(8)){addVal(50,50,50,50);}
-	if(joy1Btn(7)){addVal(-50,-50,-50,-50);}
-	if(joy1Btn(6)){addVal(18,18,18,18);}
-	if(joy1Btn(5)){addVal(-18,-18,-18,-18);}
+	if(joy1Btn(8)){addVal(-50,-50,-50,-50);}
+	if(joy1Btn(7)){addVal(50,50,50,50);}
+	if(joy1Btn(6)){addVal(-18,-18,-18,-18);}
+	if(joy1Btn(5)){addVal(18,18,18,18);}
+
+	if(joystick.joy1_TopHat == 0)
+		addVal(-25,-25,25,25);
+
+	if(joystick.joy1_TopHat == 2)
+		addVal(-25,25,25,-25);
+
+	if(joystick.joy1_TopHat == 4)
+		addVal(25,25,-25,-25);
+
+	if(joystick.joy1_TopHat == 6)
+		addVal(25,-25,-25,25);
 	//tells the motor control library to actually move the robot.
 	loadVal();
-
-	if(joystick.joy1_TopHat == 0){
-		addVal(-25,-25,25,25);
-	}
-	if(joystick.joy1_TopHat == 2){
-		addVal(-25,25,25,-25);
-	}
-	if(joystick.joy1_TopHat == 4){
-		addVal(25,25,-25,-25);
-	}
-	if(joystick.joy1_TopHat == 6){
-		addVal(25,-25,-25,25);
-	}
-
 }
 void udServos(){//updates the servos (and conveyor & flag motors).
 	//activates/deactivates servos
-	if(joy2Btn(1)){
-	moveWinch(-100);
-	}
-	if(joy2Btn(2)){
-	moveWinch(100);
-	}
-	//TODO: lift hook
-	if(joy2Btn(3)){
-		setBasketPos(60);
-	}else{
-	}
+	if(joy2Btn(1))
+		motor[leftHook]=30;
+	else if(joy2Btn(2))
+		motor[leftHook]=-30;
+	else
+		motor[leftHook]=0;
 
-	//control flag motor
-	if(joy2Btn(4)){
-		moveFlag(100);
-	}else{
-		moveFlag(0);
-	}
-	//move basket down
-	if(joy2Btn(5)){setBasketPos(false);}
-	//move basket up
-	if(joy2Btn(6)){setBasketPos(true);}
+	if(joy2Btn(4))
+		motor[rightHook]=30;
+	else if(joy2Btn(3))
+		motor[rightHook]=-30;
+	else
+		motor[rightHook]=0;
+
+	//move lift
+	if(joy2Btn(5))
+		setLiftPos(-1,false);
+	else if(joy2Btn(6))
+		setLiftPos(1,true);
+	else
+		setLiftPos(0,true);
 	//activate conveyor <=
 	if(joy2Btn(7)){
-		motor[conveyorMotor]=-50;
-		motor[motorA]=100;
-		motor[motorB]=100;
-	}
-	//activate conveyor =>
-	if(joy2Btn(8)){
-		motor[conveyorMotor]=50;
-		motor[motorA]=-100;
-		motor[motorB]=-100;
-	}
-	//deactivate conveyor
-	if((!joy2Btn(7))&&(!joy2Btn(8))){
-		motor[conveyorMotor]=0;
-		motor[motorA]=0;
-		motor[motorB]=0;
-	}
-	//lower conveyor
-	if(joy2Btn(9)){moveConveyor(true);}
-	//raise conveyor
-	if(joy2Btn(10)){moveConveyor(false);}
-	//if(joy2Btn(10)){conveyorActive=false;}
-	//
-	if(abs(j2y2)>joyTol) {
-
-	}
-	if(abs(j2y1)>joyTol) {
-		moveConveyor(j2y1);
-	}
-	//move the hook up or down wih d-pad
-	if(joystick.joy2_TopHat == 0){
-		liftHook(25);
-		}else if(joystick.joy2_TopHat == 4){
-		liftHook(-25);
+		moveConveyor(CONVEYOR_UP);
+		}else if(joy2Btn(8)){
+		moveConveyor(CONVEYOR_DOWN);
 		}else{
-		liftHook(0);
+		moveConveyor(CONVEYOR_STOP);
 	}
-
-	//tighten or loosen the winch
-	if(joystick.joy2_TopHat == 2){
-		moveWinch(100);
-		}else if(joystick.joy2_TopHat == 6){
-		moveWinch(-100);
+	if(joystick.joy2_TopHat==0){
+		setDoorPos(true);
+	}else if(joystick.joy2_TopHat==4)
+		setDoorPos(false);
+	if(abs(joystick.joy2_x1)>joyTol) {
+		setDump(joystick.joy2_x1/-6);
 		}else{
-		moveWinch(0);
-	}//check to see if works
-	if(joystick.joy2_TopHat==1){
-		setHookPos(hookOn);
+		setDump(-10);
 	}
-	if(joystick.joy2_TopHat==5){
-	setHookPos(hookOff);
-}
+	if(abs(joystick.joy2_y2)>joyTol){
+		moveConveyor(joystick.joy2_y2);
+	}
 
 	updateServos();
 }
-void udLight() {
-	lightVal+=dl;
-	if(abs(lightVal)>100){
-		dl*=-1;
-	}
-	motor[motorC]=lightVal;
+void udLight(){
+	lightVal+=1;
+	lightVal%=100;
+	motor[heartbeat]=lightVal;
 }
 task main() {
 	init();
 	waitForStart();
+	dooractive=true;
 	while(true){
 		udServos();
 		drive();

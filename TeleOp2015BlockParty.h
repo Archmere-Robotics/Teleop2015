@@ -1,46 +1,33 @@
-#pragma once
-#ifndef _MOTORPRAGMAS
-#define _MOTORPRAGMAS
-#pragma config(Hubs,  S2, HTServo,  none,     none,     none)
-#pragma config(Hubs,  S3, HTMotor,  HTMotor,  none,     none)
-#pragma config(Hubs,  S4, HTServo,  HTMotor,  HTMotor,  none)
-#pragma config(Sensor, S1,     HTSMUX,         sensorI2CCustom)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
+#pragma config(Hubs,  S2, HTServo,  HTMotor,  none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S3,     Drivetrain,     sensorI2CMuxController)
-#pragma config(Sensor, S4,     Auxillary,      sensorI2CMuxController)
-#pragma config(Motor,  mtr_S3_C1_1,     wheelA,        tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S3_C1_2,     wheelB,        tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S3_C2_1,     wheelC,        tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S3_C2_2,     wheelD,        tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S4_C2_1,     winch,         tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C2_2,     hookLift,      tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C3_1,     conveyorMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S4_C3_2,     flagLift,      tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S2_C1_1,    hook,                 tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
+#pragma config(Motor,  motorA,          heartbeat,     tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorB,          leftHook,      tmotorNXT, PIDControl, encoder)
+#pragma config(Motor,  motorC,          rightHook,     tmotorNXT, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     liftRightMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     liftLeftMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     wheelB,        tmotorTetrix, PIDControl, driveLeft)
+#pragma config(Motor,  mtr_S1_C2_2,     wheelA,        tmotorTetrix, PIDControl, driveRight)
+#pragma config(Motor,  mtr_S1_C3_1,     collectorMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorF,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S2_C2_1,     wheelC,        tmotorTetrix, PIDControl, driveRight)
+#pragma config(Motor,  mtr_S2_C2_2,     wheelD,        tmotorTetrix, PIDControl, driveLeft)
+#pragma config(Servo,  srvo_S2_C1_1,    dumpServo,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    doorServo,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
-#pragma config(Servo,  srvo_S4_C1_1,    basket,               tServoStandard)
-#pragma config(Servo,  srvo_S4_C1_2,    conveyorLift,         tServoStandard)
-#pragma config(Servo,  srvo_S4_C1_3,    servo9,               tServoNone)
-#pragma config(Servo,  srvo_S4_C1_4,    servo10,              tServoNone)
-#pragma config(Servo,  srvo_S4_C1_5,    servo11,              tServoNone)
-#pragma config(Servo,  srvo_S4_C1_6,    servo12,              tServoNone)
-#endif
+#pragma once
 //@ Archmere-Robotics/libHolonomics repo on github
-#include "libHolonimics.c"
-//#include "graphLib.c"
+#include "JoystickDriver.c"
+#include "libHolonomics.c"
 #ifndef _TELEOP2014_H
 #define _TELEOP2014_H
-const int hookOff=255;
-const int hookOn=60;
 const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
-int m1v, m2v, m3v, m4v, j1x1, j1x2, j1y1, j1y2, j2x1, j2y1, j2x2, j2y2=0;
-int lightVal=0;//light value
-int dl=1;//light change (how much the light changes every cycle
-// const bool graphing=true;
+int m1v, m2v, m3v, m4v;
+int lightVal = 0;
 /**
  * Initializes the robot. Should only be called once
  */
