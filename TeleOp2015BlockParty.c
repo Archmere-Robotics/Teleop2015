@@ -9,8 +9,8 @@
 #pragma config(Motor,  mtr_S1_C1_2,     wheelA,        tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     collectorMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     liftMotor,     tmotorTetrix, PIDControl, reversed)
-#pragma config(Motor,  mtr_S2_C2_1,     wheelD,        tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S2_C2_2,     wheelC,        tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S2_C2_1,     wheelC,        tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S2_C2_2,     wheelD,        tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Servo,  srvo_S2_C1_1,    dumpServo,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_2,    doorServo,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
@@ -62,17 +62,17 @@ void drive(){
 	if(joy1Btn(5))
 		addVal(18,18,18,18);
 	switch(joystick.joy1_TopHat){
-		case 0:
+		case 0://up
 			addVal(-25,-25,25,25);
 			break;
-		case 2:
-			addVal(-25,25,-25,25);
+		case 2://right
+			addVal(-25,25,25,-25);
 			break;
-		case 4:
+		case 4://down
 			addVal(25,25,-25,-25);
 			break;
-		case 6:
-			addVal(25,-25,25,-25);
+		case 6://left
+			addVal(25,-25,-25,25);
 			break;
 	}
 	//tells the motor control library to actually move the robot.
