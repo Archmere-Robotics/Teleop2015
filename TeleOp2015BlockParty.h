@@ -11,7 +11,6 @@
 #ifndef _TELEOP2014_H
 #define _TELEOP2014_H
 const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
-int m1v, m2v, m3v, m4v;
 int lightVal = 0;
 /**
  * Initializes the robot. Should only be called once
