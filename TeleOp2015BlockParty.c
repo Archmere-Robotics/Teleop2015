@@ -98,6 +98,10 @@ void udServos(){
 		motor[hook]=-HOOK_POWER;
 	else
 		motor[hook]=0;*/
+	if(joy2Btn(1))
+		setRightHook(true);
+	else if(joy2Btn(2))
+		setRightHook(false);
 
 	if(joy2Btn(4))
 		motor[sweeper]=SWEEPER_POWER;
@@ -122,24 +126,18 @@ void udServos(){
 	else
 		moveConveyor(CONVEYOR_STOP);
 
-	if(abs(joystick.joy2_x1)>joyTol) {
+	if(abs(joystick.joy2_x1)>joyTol)
 		setDump(joystick.joy2_x1/-5);
-		}else{
-
-		//move the door infront of the conveyor belt
-
+	else
 		//tilt the PVC carrier thing
-		if(abs(joystick.joy2_x1)>joyTol)
-			setDump(joystick.joy2_x1/-6);
-		else
-			setDump(-10);
-		//move the conveyor also with the joystick
-		if(abs(joystick.joy2_y2)>joyTol)
-			moveConveyor(joystick.joy2_y2);
+		setDump(-10);
+
+	//move the conveyor also with the joystick
+	if(abs(joystick.joy2_y2)>joyTol)
+		moveConveyor(joystick.joy2_y2);
 
 		//do magical things with the MC library
 		updateServos();
-	}
 }
 //update the heartbeat sensor value (motor A)
 void updateLight(){

@@ -7,6 +7,7 @@
 #define USING_activateServos
 #define USING_setDoorPos
 #define USING_setDump
+#define USING_setRightHook
 #include "libHolonomics.c"
 #ifndef _TELEOP2014_H
 #define _TELEOP2014_H
