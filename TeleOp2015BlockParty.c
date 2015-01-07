@@ -44,10 +44,10 @@ void init(){
 }
 void drive(){
 	getJoystickSettings(joystick);//poll joystick
-	if(abs(joystick.joy1_x1) >= joyTol || abs(joystick.joy1_y1) >= joyTol){//determines if the drive joystick is moved. If so, move the robot.
-		//change the joystick values from -128|127 to -100|100.
-		float j1x1=joystick.joy1_x1*25.0/32.0;
-		float j1y1=joystick.joy1_y1*25.0/32.0;
+	if(abs(joystick.joy1_x1) >= joyTol || abs(joystick.joy1_y1) >= joyTol) {//determines if the drive joystick is moved. If so, move the robot.
+		//make the joysticks floats, and make them nonlinear
+		float j1x1=pow((joystick.joy1_x1/128.0),3)*100.0;
+		float j1y1=pow((joystick.joy1_y1/128.0),3)*100.0;
 		// better motor code. mXv is the motor value.
 		float m1v=j1x1+j1y1;
 		float m2v=j1y1-j1x1;
@@ -75,18 +75,29 @@ void drive(){
 	case 0://up
 		addVal(-25,-25,25,25);
 		break;
+	case 1://up right
+		addVal(25,0,25,0);
+		break;
 	case 2://right
 		addVal(-25,25,25,-25);
+		break;
+	case 3://down right
+		addVal(0,-25,0,-25);
 		break;
 	case 4://down
 		addVal(25,25,-25,-25);
 		break;
+	case 5://down left
+		addVal(-25,0,-25,0);
+		break;
 	case 6://left
 		addVal(25,-25,-25,25);
 		break;
-		//TODO: add functionality for non-cardinal direction tophat states
+	case 7://up left
+		addVal(0,25,0,25);
+		break;
 	}
-	//tells the motor control library to actually move the robot.
+	//tell the motor control library to actually move the robot.
 	loadVal();
 }
 //update the servos & non-drivetrain motors
@@ -151,6 +162,7 @@ task main() {
 		udServos();
 		drive();
 		updateLight();
+		alive();
 	}
 }
 #endif

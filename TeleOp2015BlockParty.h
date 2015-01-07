@@ -8,6 +8,10 @@
 #define USING_setDoorPos
 #define USING_setDump
 #define USING_setRightHook
+//#define AWD
+#define DEBUG_AWD
+//#undef DEBUG_MOTOR_VALUES
+#define DEBUG_MOTOR_VALUES
 #include "libHolonomics.c"
 #ifndef _TELEOP2014_H
 #define _TELEOP2014_H
