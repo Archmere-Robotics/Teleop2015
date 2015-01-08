@@ -32,6 +32,7 @@ void init(){
 	Stop();//stop all of the robot's motors
 	moveConveyor(false);
 	setDump(0);//flatten the PVC thing
+	setRightHook(false);
 	activateServos();
 	updateServos();//magic
 	//reset motor encoders
@@ -138,10 +139,10 @@ void udServos(){
 		moveConveyor(CONVEYOR_STOP);
 
 	if(abs(joystick.joy2_x1)>joyTol)
-		setDump(joystick.joy2_x1/-5);
+		setDump(joystick.joy2_x1/-4);
 	else
 		//tilt the PVC carrier thing
-		setDump(-10);
+		setDump(0);
 
 	//move the conveyor also with the joystick
 	if(abs(joystick.joy2_y2)>joyTol)
