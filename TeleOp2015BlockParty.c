@@ -139,10 +139,10 @@ void udServos(){
 		moveConveyor(CONVEYOR_STOP);
 
 	if(abs(joystick.joy2_x1)>joyTol)
-		setDump(joystick.joy2_x1/-4);
+		setDump(joystick.joy2_x1/-6);
 	else
 		//tilt the PVC carrier thing
-		setDump(0);
+		setDump(10);
 
 	//move the conveyor also with the joystick
 	if(abs(joystick.joy2_y2)>joyTol)
