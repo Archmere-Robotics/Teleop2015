@@ -46,14 +46,14 @@ void drive(){
 	getJoystickSettings(joystick);//poll joystick
 	if(abs(joystick.joy1_x1) >= joyTol || abs(joystick.joy1_y1) >= joyTol) {//determines if the drive joystick is moved. If so, move the robot.
 		//make the joysticks floats, and make them nonlinear
-		float j1x1=pow((joystick.joy1_x1/128.0),3)*100.0;
-		float j1y1=pow((joystick.joy1_y1/128.0),3)*100.0;
+		float j1x1=pow((joystick.joy1_x1/128.0),3)*MOTOR_MAX;
+		float j1y1=pow((joystick.joy1_y1/128.0),3)*MOTOR_MAX;
 		//sends the values to the motor control library.
 		addVector(j1x1,j1y1);
 	}
 	//determine whether the rotation joystick has been moved.
 	if(abs(joystick.joy1_x2) >=joyTol)
-		addRotation(joystick.joy1_x2);
+		addRotation(pow((joystick.joy1_x2/128.0),3)*MOTOR_MAX);
 
 	//rotate robot with buttons on the back of the controller
 	if(joy1Btn(8))
@@ -62,34 +62,34 @@ void drive(){
 		addRotation(-50);
 	//no idea why 18, but it works
 	if(joy1Btn(6))
-		addRotation(18);
+		addRotation(25);
 	if(joy1Btn(5))
-		addRotation(-18);
+		addRotation(-25);
 	//move the robot in a straight line with the tophat
 	switch(joystick.joy1_TopHat){
 	case 0://up
-		addVector(0,25);
+		addVector(0,FCC);
 		break;
 	case 1://up right
-		addVector(25,25);
+		addVector(FCC,FCC);
 		break;
 	case 2://right
-		addVector(25,0);
+		addVector(FCC,0);
 		break;
 	case 3://down right
-		addVector(25,-25);
+		addVector(FCC,-FCC);
 		break;
 	case 4://down
-		addVector(0,-25);
+		addVector(0,-FCC);
 		break;
 	case 5://down left
-		addVector(-25,-25);
+		addVector(-FCC,-FCC);
 		break;
 	case 6://left
-		addVector(-25,0);
+		addVector(-FCC,0);
 		break;
 	case 7://up left
-		addVector(-25,25);
+		addVector(-FCC,FCC);
 		break;
 	}
 	//tell the motor control library to actually move the robot.

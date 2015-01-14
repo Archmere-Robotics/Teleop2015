@@ -1,6 +1,10 @@
 #pragma once
 //@ Archmere-Robotics/libHolonomics repo on github
 #include "JoystickDriver.c"
+//include guard
+#ifndef _TELEOP2014_H
+#define _TELEOP2014_H
+
 //say what functions to use
 #define USING_moveConveyor
 #define USING_setLiftPos
@@ -8,13 +12,13 @@
 #define USING_setDoorPos
 #define USING_setDump
 #define USING_setRightHook
-//#define AWD
-#define DEBUG_AWD
-//#undef DEBUG_MOTOR_VALUES
 #define DEBUG_MOTOR_VALUES
 #include "libHolonomics.c"
-#ifndef _TELEOP2014_H
-#define _TELEOP2014_H
+
+//Fine Control Constant (speed to move motors from tophat)
+#define FCC 25
+
+
 const int joyTol=10;//tolerance for joystick(s): if the |joystick value|<tolerance, then ignore joystick. This is to prevent noise.
 int lightVal = 0;
 /**
