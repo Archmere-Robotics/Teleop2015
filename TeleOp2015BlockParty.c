@@ -6,10 +6,10 @@
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          sweeper,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorC,          heartbeat,     tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     wheelC,        tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     wheelD,        tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S2_C1_1,     wheelB,        tmotorTetrix, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S2_C1_2,     wheelA,        tmotorTetrix, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     wheelC,        tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     wheelD,        tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S2_C1_1,     wheelB,        tmotorTetrix, PIDControl, encoder)
+#pragma config(Motor,  mtr_S2_C1_2,     wheelA,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S2_C2_1,     collectorMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S2_C2_2,     liftMotor,     tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    servo1,               tServoNone)
@@ -48,53 +48,48 @@ void drive(){
 		//make the joysticks floats, and make them nonlinear
 		float j1x1=pow((joystick.joy1_x1/128.0),3)*100.0;
 		float j1y1=pow((joystick.joy1_y1/128.0),3)*100.0;
-		// better motor code. mXv is the motor value.
-		float m1v=j1x1+j1y1;
-		float m2v=j1y1-j1x1;
-		float m3v=-j1y1-j1x1;
-		float m4v=j1x1-j1y1;
 		//sends the values to the motor control library.
-		addVal(-m1v, -m2v, -m3v, -m4v);
+		addVector(j1x1,j1y1);
 	}
 	//determine whether the rotation joystick has been moved.
 	if(abs(joystick.joy1_x2) >=joyTol)
-		addVal(-joystick.joy1_x2, -joystick.joy1_x2, -joystick.joy1_x2, -joystick.joy1_x2);
+		addRotation(joystick.joy1_x2);
 
 	//rotate robot with buttons on the back of the controller
 	if(joy1Btn(8))
-		addVal(-50,-50,-50,-50);
+		addRotation(50);
 	if(joy1Btn(7))
-		addVal(50,50,50,50);
+		addRotation(-50);
 	//no idea why 18, but it works
 	if(joy1Btn(6))
-		addVal(-18,-18,-18,-18);
+		addRotation(18);
 	if(joy1Btn(5))
-		addVal(18,18,18,18);
+		addRotation(-18);
 	//move the robot in a straight line with the tophat
 	switch(joystick.joy1_TopHat){
 	case 0://up
-		addVal(-25,-25,25,25);
+		addVector(0,25);
 		break;
 	case 1://up right
-		addVal(25,0,25,0);
+		addVector(25,25);
 		break;
 	case 2://right
-		addVal(-25,25,25,-25);
+		addVector(25,0);
 		break;
 	case 3://down right
-		addVal(0,-25,0,-25);
+		addVector(25,-25);
 		break;
 	case 4://down
-		addVal(25,25,-25,-25);
+		addVector(0,-25);
 		break;
 	case 5://down left
-		addVal(-25,0,-25,0);
+		addVector(-25,-25);
 		break;
 	case 6://left
-		addVal(25,-25,-25,25);
+		addVector(-25,0);
 		break;
 	case 7://up left
-		addVal(0,25,0,25);
+		addVector(-25,25);
 		break;
 	}
 	//tell the motor control library to actually move the robot.
