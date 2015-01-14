@@ -2,7 +2,7 @@
 #pragma config(Hubs,  S2, HTMotor,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S4,     IRLeft,         sensorI2CCustom)
+#pragma config(Sensor, S4,    HTSMux,         sensorI2CCustom)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          sweeper,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorC,          heartbeat,     tmotorNXT, openLoop, encoder)
@@ -28,7 +28,6 @@
 #define _TELEOP2015
 
 void init(){
-	Stop();//stops the robot.
 	Stop();//stop all of the robot's motors
 	moveConveyor(false);
 	setDump(0);//flatten the PVC thing
