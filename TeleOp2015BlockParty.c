@@ -1,10 +1,8 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  none,     none)
 #pragma config(Hubs,  S2, HTMotor,  HTMotor,  none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S4,    HTSMux,         sensorI2CCustom)
-#pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorB,          sweeper,       tmotorNXT, PIDControl, encoder)
+#pragma config(Sensor, S4,     HTSMux,         sensorI2CCustom)
+#pragma config(Motor,  motorA,          sweeperA,       tmotorNXT, PIDControl, encoder)
+#pragma config(Motor,  motorB,          sweeperB,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorC,          heartbeat,     tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     wheelC,        tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     wheelD,        tmotorTetrix, PIDControl, encoder)
@@ -109,12 +107,18 @@ void udServos(){
 	else if(joy2Btn(2))
 		setRightHook(false);
 
-	if(joy2Btn(4))
-		motor[sweeper]=SWEEPER_POWER;
-	else if(joy2Btn(3))
-		motor[sweeper]=-SWEEPER_POWER;
-	else
-		motor[sweeper]=0;
+	if(joy2Btn(4)){
+		motor[sweeperA]=SWEEPER_POWER;
+		motor[sweeperB]=SWEEPER_POWER;
+	}
+	else if(joy2Btn(3)){
+		motor[sweeperA]=-SWEEPER_POWER;
+		motor[sweeperB]=-SWEEPER_POWER;
+}
+	else{
+		motor[sweeperA]=0;
+		motor[sweeperB]=0;
+	}
 
 	//move lift
 	if(joy2Btn(5))
