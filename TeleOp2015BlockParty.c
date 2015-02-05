@@ -40,8 +40,8 @@ void init(){
 	nMotorEncoder[wheelB]=0;
 	nMotorEncoder[wheelC]=0;
 	nMotorEncoder[wheelD]=0;
-	servo[leftIRServo]=LEFT_IR_DOWN;
-	servo[rightIRServo]=RIGHT_IR_DOWN;
+	//servo[leftIRServo]=LEFT_IR_DOWN;
+	//servo[rightIRServo]=RIGHT_IR_DOWN;
 	return;
 }
 void drive(){
